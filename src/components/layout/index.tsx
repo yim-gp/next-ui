@@ -2,13 +2,18 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Menu, Home, Settings, User, Moon, Sun } from "lucide-react";
-import { Button } from "@heroui/react";
+import { Menu, Home, Settings, User, Moon, Sun, LayoutGrid } from "lucide-react";
+import { BreadcrumbItem, Breadcrumbs, Button } from "@heroui/react";
 import { useTheme } from "@/hook/useTheme";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function LayoutExample({ children }: { children: React.ReactNode }) {
     const [sidebarOpen, setSidebarOpen] = React.useState(true);
     const { theme, toggleTheme } = useTheme();
+    const router = useRouter();
+    const pathname = usePathname();
+    const path = pathname.split('/').filter((text) => text.length > 0) || '/';
+    console.log(path);
     return (
         <div className="min-h-screen grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]  ">
             {/* Header (full width) */}
@@ -23,7 +28,14 @@ export default function LayoutExample({ children }: { children: React.ReactNode 
                     >
                         <Menu className="w-8 h-8" />
                     </Button>
-                    <h1 className="text-xl font-semibold">HeroUI Dashboard</h1>
+                    <div className="flex flex-row gap-10">
+                        <h1 className="text-xl font-semibold">HeroUI Dashboard</h1>
+                        <Breadcrumbs>
+                            {path.length > 1 && path.map((segment, index) => (
+                                <BreadcrumbItem className={path.length - 1 === index ? "text-xl font-bold underline" : ""} key={index}>{segment}</BreadcrumbItem>
+                            ))}
+                        </Breadcrumbs>
+                    </div>
                 </div>
                 <div className="flex items-center gap-3">
                     <Button variant="solid" size="sm" disableRipple>
@@ -48,8 +60,8 @@ export default function LayoutExample({ children }: { children: React.ReactNode 
                 className=" border-r dark:border-slate-700 border-slate-200 shadow-sm overflow-hidden"
             >
                 <nav className="p-2 space-y-1">
-                    <SidebarItem icon={<Home className="dark:hover:text-slate-100" />} label="Home" open={sidebarOpen} />
-                    <SidebarItem icon={<User className="dark:hover:text-slate-100" />} label="Profile" open={sidebarOpen} />
+                    <SidebarItem icon={<Home className="dark:hover:text-slate-100" />} label="Home" open={sidebarOpen} onClick={()=>{ router.push('/')}} />
+                    <SidebarItem icon={<LayoutGrid className="dark:hover:text-slate-100" />} label="Components" onClick={() => { router.push('/components') }} open={sidebarOpen} />
                     <SidebarItem icon={<Settings className="dark:hover:text-slate-100" />} label="Settings" open={sidebarOpen} />
                 </nav>
             </motion.aside >
@@ -74,9 +86,10 @@ export default function LayoutExample({ children }: { children: React.ReactNode 
     );
 }
 
-function SidebarItem({ icon, label, open }: { icon: React.ReactNode; label: string; open: boolean }) {
+function SidebarItem({ icon, label, open, onClick }: { icon: React.ReactNode; label: string; open: boolean; onClick?: () => void }) {
     return (
         <Button
+            onClick={onClick}
             disableRipple
             variant="light"
             className="

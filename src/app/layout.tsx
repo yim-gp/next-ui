@@ -39,7 +39,7 @@ export default function RootLayout({
           prompt.variable,
         )}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+        <Providers >
           <LayoutExample>
             {children}
           </LayoutExample>
