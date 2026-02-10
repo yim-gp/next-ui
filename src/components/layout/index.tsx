@@ -4,11 +4,9 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Menu, Home, Settings, User, Moon, Sun } from "lucide-react";
 import { Button } from "@heroui/react";
-import { useTheme } from "next-themes";
 
 export default function LayoutExample({ children }: { children: React.ReactNode }) {
     const [sidebarOpen, setSidebarOpen] = React.useState(true);
-    const { theme, setTheme } = useTheme();
     return (
         <div className="min-h-screen grid grid-cols-[auto_1fr] grid-rows-[auto_1fr] text-black bg-slate-50">
             {/* Header (full width) */}
@@ -31,9 +29,6 @@ export default function LayoutExample({ children }: { children: React.ReactNode 
                     </Button>
                     <Button color="primary" size="sm" disableRipple>
                         Sign up
-                    </Button>
-                    <Button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} disableRipple>
-                        {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
                     </Button>
                 </div>
             </header >
